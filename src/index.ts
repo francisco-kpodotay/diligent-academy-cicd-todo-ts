@@ -1,7 +1,9 @@
-import { createApp } from "./src/app.js";
 import { join } from "node:path";
-import { createStore } from "./src/file-store.js";
-import { AppError } from "./src/app-error.js";
+import { createStore } from "./file-store.js";
+import { AppError } from "./app-error.js";
+import { createApp } from "./app.js";
+
+console.log("hello");
 
 const STORE_PATH = join(import.meta.dirname,'todos.json');
 const todoStore = createStore(STORE_PATH);

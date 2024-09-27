@@ -9,7 +9,18 @@ const config = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
-  transform: {},
+  transform: {
+    '^.+\\.ts$': 'ts-jest', // Use ts-jest to handle TypeScript files
+  },
+  extensionsToTreatAsEsm: ['.ts'], // Treat .ts files as ES modules
+  globals: {
+    'ts-jest': {
+      useESM: true, // Enable ESM support in ts-jest
+    },
+  },
+  testEnvironment: 'node', // Use Node.js as the test environment
+  testMatch: ['**/*.spec.ts'], // Ensure Jest runs tests for TypeScript files
 };
 
 export default config;
+
