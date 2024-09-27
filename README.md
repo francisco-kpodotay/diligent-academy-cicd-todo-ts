@@ -8,6 +8,14 @@ Install the npm dependencies:
 npm install
 ```
 
+## Build
+
+If you make changes, you need to make build the app.
+
+```bash
+npm run build
+```
+
 ## Try out the app
 
 The app is a simple TODO management app, currently it has two functionalities.
@@ -16,13 +24,13 @@ You can create a TODO and list all TODOs.
 You can add a new todo like this:
 
 ```bash
-node index.js add "Read a book."
+node start add "Read a book."
 ```
 
 You can list all todos with this command:
 
 ```bash
-node index.js list 
+node start list 
 ```
 
 ## Running the tests

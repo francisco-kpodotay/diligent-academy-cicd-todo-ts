@@ -1,4 +1,4 @@
-import { validateAddParams } from "./validate";
+import { validateAddParams } from "../src/validate";
 
 describe('validateAddParams', () => {
   it('should pass and return with the original params with single string', () => {
