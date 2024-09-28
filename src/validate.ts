@@ -12,7 +12,7 @@ export function validateAddParams(params: string[]) {
   return params;
 }
 
-export function validatedCompleteParams(todoStore: TodoStore, param: number){
+export function validatedIdParam(todoStore: TodoStore, param: number){
   //TODO NaN
   if (isNaN(param)){
     throw new AppError('Given parameter is not a number.')

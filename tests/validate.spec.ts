@@ -1,5 +1,5 @@
 import { describe, it, expect, jest } from "@jest/globals";
-import { validateAddParams, validatedCompleteParams } from "../src/validate.js";
+import { validateAddParams, validatedIdParam } from "../src/validate.js";
 import { Todo } from "../src/interfaces.js";
 
 //TODO extract the test helper function
@@ -61,7 +61,7 @@ describe("validatedCompleteParams", () => {
       { id: 1, title: "Todo 1", done: false },
     ]);
 
-    const result = validatedCompleteParams(mockStore, param);
+    const result = validatedIdParam(mockStore, param);
 
     expect(result).toStrictEqual(expected);
   });
@@ -71,7 +71,7 @@ describe("validatedCompleteParams", () => {
     const mockStore = createMockStore([]);
 
     // @ts-ignore
-    expect(() => validatedCompleteParams(mockStore, param)).toThrow(
+    expect(() => validatedIdParam(mockStore, param)).toThrow(
       "Given parameter is not a number."
     );
   });
@@ -80,7 +80,7 @@ describe("validatedCompleteParams", () => {
     const param = 0;
     const mockStore = createMockStore([]);
 
-    expect(() => validatedCompleteParams(mockStore, param)).toThrow(
+    expect(() => validatedIdParam(mockStore, param)).toThrow(
       "Parameter should be bigger than 0."
     );
   });
@@ -91,7 +91,7 @@ describe("validatedCompleteParams", () => {
       { id: 1, title: "Todo 1", done: false },
     ]);
 
-    expect(() => validatedCompleteParams(mockStore, param)).toThrow(
+    expect(() => validatedIdParam(mockStore, param)).toThrow(
       "Given number is not a valid Id."
     );
   });

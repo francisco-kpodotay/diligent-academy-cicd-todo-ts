@@ -1,5 +1,5 @@
 import { describe, expect, it, jest } from "@jest/globals";
-import { add, complete, format, formatList, list } from "../src/todo.js";
+import { add, complete, find, format, formatList, list } from "../src/todo.js";
 import { Todo } from "../src/interfaces.js";
 
 //TODO extract the test helper function
@@ -150,5 +150,34 @@ describe("complete", () => {
 
     expect(current.done).toStrictEqual(true);
     expect(current).toStrictEqual(expected);
+  });
+});
+
+describe("find", () => {
+  it("should find an existing todo", () => {
+    const params = 1;
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+    ]);
+    const expected = {
+      id: 1,
+      done: false,
+      title: "New Todo",
+    };
+
+    const current = find(mockStore, params);
+
+    expect(current).toStrictEqual(expected);
+  });
+
+  it("should find an existing todo", () => {
+    const params = 1;
+    const mockStore = createMockStore([]);
+
+    expect(() => find(mockStore, params)).toThrow("Todo with id 1 not found");
   });
 });

@@ -1,3 +1,4 @@
+import { AppError } from "./app-error.js";
 import { Todo, TodoStore } from "./interfaces.js";
 
 export function format(todo: Todo) {
@@ -35,10 +36,20 @@ export function add(store: TodoStore, params: string[]): Todo {
 }
 
 export function complete(store: TodoStore, params: number): Todo {
-  const id = +params;
+  const id = params;
   const todos: Todo[] = store.get();
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   todos[todoIndex].done = true;
   store.set(todos);
   return todos[todoIndex];
+}
+
+export function find(store: TodoStore, params: number): Todo {
+  const id = params;
+  const todos: Todo[] = store.get();
+  const result = todos.find((todo) => todo.id === id);
+  if (!result) { 
+    throw new AppError(`Todo with id ${id} not found`);
+  }
+  return result;
 }
