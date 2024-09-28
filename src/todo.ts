@@ -44,7 +44,7 @@ export function complete(store: TodoStore, params: number): Todo {
   return todos[todoIndex];
 }
 
-export function find(store: TodoStore, params: number): Todo {
+export function findById(store: TodoStore, params: number): Todo {
   const id = params;
   const todos: Todo[] = store.get();
   const result = todos.find((todo) => todo.id === id);

@@ -115,7 +115,7 @@ As a user, I can add one or more label to my todo, so I can group them.
 - Cover the new functionality with tests.
 
 
-## 10. User Story: Show the labels when displaying a todo
+## 10. User Story: Show the labels when displaying a todo ❗❗❗❗
 
 As a user I can check the added labels when listing my todos.
 
