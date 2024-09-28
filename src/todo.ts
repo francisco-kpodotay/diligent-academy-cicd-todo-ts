@@ -21,7 +21,7 @@ export function list(store: TodoStore) {
   return store.get();
 }
 
-export function add(store: TodoStore, params: string[]) {
+export function add(store: TodoStore, params: string[]): Todo {
   const title = params.join(" ");
   const todos = store.get();
   const newTodo = {
@@ -32,4 +32,13 @@ export function add(store: TodoStore, params: string[]) {
   const toStore = [...todos, newTodo];
   store.set(toStore);
   return newTodo;
+}
+
+export function complete(store: TodoStore, params: number): Todo {
+  const id = +params;
+  const todos: Todo[] = store.get();
+  const todoIndex = todos.findIndex((todo) => todo.id === id);
+  todos[todoIndex].done = true;
+  store.set(todos);
+  return todos[todoIndex];
 }

@@ -1,7 +1,8 @@
 import { describe, expect, it, jest } from "@jest/globals";
-import { add, format, formatList, list } from "../src/todo.js";
+import { add, complete, format, formatList, list } from "../src/todo.js";
 import { Todo } from "../src/interfaces.js";
 
+//TODO extract the test helper function
 function createMockStore(data: Todo[]) {
   return {
     get: jest.fn(() => data),
@@ -126,5 +127,28 @@ describe("add", () => {
 
     expect(current).toStrictEqual(expected);
     expect(mockStore.set.mock.calls[0][0]).toStrictEqual([...stored, expected]);
+  });
+});
+
+describe("complete", () => {
+  it("should complite an existing todo", () => {
+    const params = 1;
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+    ]);
+    const expected = {
+      id: 1,
+      done: true,
+      title: "New Todo",
+    };
+
+    const current = complete(mockStore, params);
+
+    expect(current.done).toStrictEqual(true);
+    expect(current).toStrictEqual(expected);
   });
 });
