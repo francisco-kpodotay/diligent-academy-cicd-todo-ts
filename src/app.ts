@@ -20,7 +20,7 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
       const completed = complete(todoStore, validatedIdParam(todoStore, +params));
       display(["Todo set to completed:", format(completed)]);
       break;
-    case "find":
+    case "find-by-id":
       const found = find(todoStore, validatedIdParam(todoStore, +params))
       display(["Found Todo:", format(found)]);
       break;
