@@ -1,13 +1,15 @@
-export function format(todo) {
-  return `${todo.id} - [${todo.done ? '✅': ' '}] ${todo.title}`;
+import { Todo, TodoStore } from "./interfaces.js";
+
+export function format(todo: Todo) {
+  return `${todo.id} - [${todo.done ? "x" : " "}] ${todo.title}`;
 }
 
-export function formatList(todos) {
-  return todos.map(format)
+export function formatList(todos: Todo[]) {
+  return todos.map(format);
 }
 
-function nextId(todos) {
-  const ids = todos.map(todo => todo.id);
+function nextId(todos: Todo[]) {
+  const ids = todos.map((todo) => todo.id);
   if (ids.length === 0) {
     return 1;
   }
@@ -15,19 +17,19 @@ function nextId(todos) {
   return maxId + 1;
 }
 
-export function list(store) {
-  return store.get(); 
+export function list(store: TodoStore) {
+  return store.get();
 }
 
-export function add(store, params) {
-  const [title] = params;
-  const todos = store.get()
+export function add(store: TodoStore, params: string[]) {
+  const title = params.join(" ");
+  const todos = store.get();
   const newTodo = {
     title,
     done: false,
-    id: nextId(todos)
-  }
-  const toStore = [...todos, newTodo]
-  store.set(toStore)
+    id: nextId(todos),
+  };
+  const toStore = [...todos, newTodo];
+  store.set(toStore);
   return newTodo;
 }

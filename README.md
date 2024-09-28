@@ -10,7 +10,7 @@ npm install
 
 ## Build
 
-If you make changes, you need to make build the app.
+If you make changes, you need to build the app before run(```npm start```) it.
 
 ```bash
 npm run build
@@ -24,13 +24,13 @@ You can create a TODO and list all TODOs.
 You can add a new todo like this:
 
 ```bash
-node start add "Read a book."
+npm start add Read a book.
 ```
 
 You can list all todos with this command:
 
 ```bash
-node start list 
+npm start list 
 ```
 
 ## Running the tests

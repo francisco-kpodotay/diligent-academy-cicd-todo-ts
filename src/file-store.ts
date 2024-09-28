@@ -1,6 +1,7 @@
 import {existsSync, readFileSync, writeFileSync} from 'node:fs';
+import { TodoStore } from './interfaces.js';
 
-export function createStore(path) {
+export function createStore(path: string) {
   if(!existsSync(path)) {
     writeFileSync(path, JSON.stringify([], null, 2), 'utf-8');
   } 
@@ -10,7 +11,7 @@ export function createStore(path) {
       const textContent = readFileSync(path, 'utf-8');
       return JSON.parse(textContent);
     },
-    set: (newData) => {
+    set: (newData: TodoStore[]) => {
       writeFileSync(path, JSON.stringify(newData, null, 2), 'utf-8');
     }
   }
