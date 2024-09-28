@@ -1,5 +1,9 @@
 import { describe, it, expect, jest } from "@jest/globals";
-import { validateAddParams, validatedIdParam } from "../src/validate.js";
+import {
+  validateAddParams,
+  validatedIdParam,
+  validateFindTitleParams,
+} from "../src/validate.js";
 import { Todo } from "../src/interfaces.js";
 
 //TODO extract the test helper function
@@ -93,6 +97,39 @@ describe("validatedCompleteParams", () => {
 
     expect(() => validatedIdParam(mockStore, param)).toThrow(
       "Given number is not a valid Id."
+    );
+  });
+});
+
+describe("validateFindTitleParams", () => {
+  it("should pass and return with the original params", () => {
+    const param = ["Titile"];
+    const expected = "Titile";
+
+    const result = validateFindTitleParams(param);
+
+    expect(result).toStrictEqual(expected);
+  });
+
+  it("should throw when no param presented", () => {
+    const param: string[] = [];
+
+    expect(() => validateFindTitleParams(param)).toThrow("Give a title.");
+  });
+
+  it("should throw when two param presented", () => {
+    const param: string[] = ["Titile", "Title2"];
+
+    expect(() => validateFindTitleParams(param)).toThrow(
+      "Give only one title. Do not use space."
+    );
+  });
+
+  it("should throw when two param is shorter than 3 letter", () => {
+    const param: string[] = ["Ti"];
+
+    expect(() => validateFindTitleParams(param)).toThrow(
+      "Give 3 letter at least."
     );
   });
 });

@@ -1,5 +1,13 @@
 import { describe, expect, it, jest } from "@jest/globals";
-import { add, complete, find, format, formatList, list } from "../src/todo.js";
+import {
+  add,
+  complete,
+  findById,
+  findByTitle,
+  format,
+  formatList,
+  list,
+} from "../src/todo.js";
 import { Todo } from "../src/interfaces.js";
 
 //TODO extract the test helper function
@@ -153,7 +161,7 @@ describe("complete", () => {
   });
 });
 
-describe("find", () => {
+describe("findById", () => {
   it("should find an existing todo", () => {
     const params = 1;
     const mockStore = createMockStore([
@@ -169,7 +177,7 @@ describe("find", () => {
       title: "New Todo",
     };
 
-    const current = find(mockStore, params);
+    const current = findById(mockStore, params);
 
     expect(current).toStrictEqual(expected);
   });
@@ -178,6 +186,83 @@ describe("find", () => {
     const params = 1;
     const mockStore = createMockStore([]);
 
-    expect(() => find(mockStore, params)).toThrow("Todo with id 1 not found");
+    expect(() => findById(mockStore, params)).toThrow(
+      "Todo with id 1 not found"
+    );
+  });
+});
+
+describe("findByTitle", () => {
+  it("should find a existing todo", () => {
+    const params = "new";
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+      {
+        id: 2,
+        done: false,
+        title: "Todo",
+      },
+    ]);
+    const expected = [
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+    ];
+
+    const current = findByTitle(mockStore, params);
+
+    expect(current).toStrictEqual(expected);
+  });
+
+  it("should find two existing todo", () => {
+    const params = "new";
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+      {
+        id: 2,
+        done: false,
+        title: "Todo",
+      },
+      {
+        id: 3,
+        done: false,
+        title: "new",
+      },
+    ]);
+    const expected = [
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+      {
+        id: 3,
+        done: false,
+        title: "new",
+      },
+    ];
+
+    const current = findByTitle(mockStore, params);
+
+    expect(current).toStrictEqual(expected);
+  });
+
+  it("should throw when no macth found", () => {
+    const params = "new";
+    const mockStore = createMockStore([]);
+
+    expect(() => findByTitle(mockStore, params)).toThrow(
+      `Don't found Todod with title: "new"`
+    );
   });
 });

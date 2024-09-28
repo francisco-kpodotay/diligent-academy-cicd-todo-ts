@@ -48,8 +48,20 @@ export function findById(store: TodoStore, params: number): Todo {
   const id = params;
   const todos: Todo[] = store.get();
   const result = todos.find((todo) => todo.id === id);
-  if (!result) { 
+  if (!result) {
     throw new AppError(`Todo with id ${id} not found`);
   }
   return result;
 }
+
+export function findByTitle(store: TodoStore, params: string): Todo[] {
+  const todos: Todo[] = store.get();
+  const result = todos.filter((todo) =>
+    todo.title.toLowerCase().includes(params.toLowerCase())
+  );
+  if (result.length <= 0) {
+    throw new AppError(`Don't found Todod with title: "${params}"`);
+  }
+  return result;
+}
+
