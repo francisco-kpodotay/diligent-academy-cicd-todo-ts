@@ -1,4 +1,5 @@
 import { AppError } from "./app-error.js";
+import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
 
 export function validateAddParams(params: string[]) {
@@ -13,7 +14,7 @@ export function validateAddParams(params: string[]) {
 }
 
 export function validateFindTitleParams(params: string[]) {
-  const title = params[0];
+  const [title] = params;
   if (params.length <= 0) {
     throw new AppError("Give a title.");
   }
@@ -26,18 +27,30 @@ export function validateFindTitleParams(params: string[]) {
   return title;
 }
 
+export function validateStatusParam(params: string[]) {
+  const [title] = params;
+  if (params.length <= 0) {
+    throw new AppError("Give a status.");
+  }
+  if (params.length !== 1) {
+    throw new AppError("Give only one status. Do not use space.");
+  }
+  if (title !== Status.Done && title !== Status.NotDone) {
+    throw new AppError(
+      `This is not a valid param: "${title}". Try to use "done" or "not-done".`
+    );
+  }
+  return title;
+}
+
 export function validatedIdParam(todoStore: TodoStore, param: number) {
-  //TODO NaN
   if (isNaN(param)) {
     throw new AppError("Given parameter is not a number.");
   }
-  //TODO param <=0
   if (param <= 0) {
     throw new AppError("Parameter should be bigger than 0.");
   }
-  //TODO param bigger than array
   const listOfIds = todoStore.get().map((todo: Todo) => +todo.id);
-
   if (!listOfIds.includes(param)) {
     throw new AppError("Given number is not a valid Id.");
   }

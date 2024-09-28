@@ -1,4 +1,5 @@
 import { AppError } from "./app-error.js";
+import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
 
 export function format(todo: Todo) {
@@ -35,8 +36,8 @@ export function add(store: TodoStore, params: string[]): Todo {
   return newTodo;
 }
 
-export function complete(store: TodoStore, params: number): Todo {
-  const id = params;
+export function complete(store: TodoStore, param: number): Todo {
+  const id = param;
   const todos: Todo[] = store.get();
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   todos[todoIndex].done = true;
@@ -44,8 +45,8 @@ export function complete(store: TodoStore, params: number): Todo {
   return todos[todoIndex];
 }
 
-export function findById(store: TodoStore, params: number): Todo {
-  const id = params;
+export function findById(store: TodoStore, param: number): Todo {
+  const id = param;
   const todos: Todo[] = store.get();
   const result = todos.find((todo) => todo.id === id);
   if (!result) {
@@ -54,14 +55,27 @@ export function findById(store: TodoStore, params: number): Todo {
   return result;
 }
 
-export function findByTitle(store: TodoStore, params: string): Todo[] {
+export function findByTitle(store: TodoStore, param: string): Todo[] {
   const todos: Todo[] = store.get();
   const result = todos.filter((todo) =>
-    todo.title.toLowerCase().includes(params.toLowerCase())
+    todo.title.toLowerCase().includes(param.toLowerCase())
   );
   if (result.length <= 0) {
-    throw new AppError(`Don't found Todod with title: "${params}"`);
+    throw new AppError(`Don't found Todod with title: "${param}"`);
   }
   return result;
 }
 
+export function findByStatus(store: TodoStore, param: string) {
+  const todos: Todo[] = store.get();
+  if (param === Status.Done) {
+    return todos.filter((todo) => todo.done === true);
+  }
+  if (param === Status.NotDone) {
+    return todos.filter((todo) => todo.done === false);
+  } else {
+    throw new AppError(
+      `This is not a valid param: "${param}". Try to use "done" or "not-done".`
+    );
+  }
+}

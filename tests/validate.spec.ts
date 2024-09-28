@@ -2,6 +2,7 @@ import { describe, it, expect, jest } from "@jest/globals";
 import {
   validateAddParams,
   validatedIdParam,
+  validateStatusParam,
   validateFindTitleParams,
 } from "../src/validate.js";
 import { Todo } from "../src/interfaces.js";
@@ -133,3 +134,35 @@ describe("validateFindTitleParams", () => {
     );
   });
 });
+
+describe("validatedStatusParam", ()=>{
+  it("should pass and return with the original params", ()=>{
+    const param = ["done"];
+    const expected = "done";
+
+    const result = validateStatusParam(param)
+
+    expect(result).toStrictEqual(expected);
+  })
+  it("should throw when no param presented", () => {
+    const param: string[] = [];
+
+    expect(() => validateStatusParam(param)).toThrow("Give a status.");
+  });
+
+  it("should throw when two param presented", () => {
+    const param: string[] = ["Titile", "Title2"];
+
+    expect(() => validateStatusParam(param)).toThrow(
+      "Give only one status. Do not use space."
+    );
+  });
+
+  it("should throw when not the correct metodes used", ()=>{
+    const param = ["do"];
+
+    expect(() => validateStatusParam(param)).toThrow(
+     `This is not a valid param: "do". Try to use "done" or "not-done".`
+    );
+  })
+})

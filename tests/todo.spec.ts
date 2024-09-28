@@ -3,6 +3,7 @@ import {
   add,
   complete,
   findById,
+  findByStatus,
   findByTitle,
   format,
   formatList,
@@ -266,3 +267,82 @@ describe("findByTitle", () => {
     );
   });
 });
+
+describe("findByStatus", ()=>{
+  it("should find a existing todo with done status (true)", ()=>{
+    const param = "done";
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+      {
+        id: 2,
+        done: true,
+        title: "Todo",
+      },
+      {
+        id: 3,
+        done: true,
+        title: "new",
+      },
+    ]);
+    const expected = [
+      {
+        id: 2,
+        done: true,
+        title: "Todo",
+      },
+      {
+        id: 3,
+        done: true,
+        title: "new",
+      }
+    ];
+
+    const current = findByStatus(mockStore, param)
+    
+    expect(current).toStrictEqual(expected);
+  })
+  it("should find a existing todo with not-done status (false)", ()=>{
+    const param = "not-done";
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+      {
+        id: 2,
+        done: true,
+        title: "Todo",
+      },
+      {
+        id: 3,
+        done: true,
+        title: "new",
+      },
+    ]);
+    const expected = [
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+      },
+    ];
+
+    const current = findByStatus(mockStore, param)
+
+    expect(current).toStrictEqual(expected);
+  })
+
+  it("should throw when param is not valid", () => {
+    const params = "do";
+    const mockStore = createMockStore([]);
+
+    expect(() => findByStatus(mockStore, params)).toThrow(
+      `This is not a valid param: "do". Try to use "done" or "not-done".`
+    );
+  });
+})

@@ -6,12 +6,14 @@ import {
   complete,
   findById,
   findByTitle,
+  findByStatus,
 } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
 import {
   validateAddParams,
   validatedIdParam,
+  validateStatusParam,
   validateFindTitleParams,
 } from "./validate.js";
 import { TodoStore } from "./interfaces.js";
@@ -43,13 +45,12 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
       display(["Found Todo:", format(foundById)]);
       break;
     case "find-by-title":
-      const searchedTitle = validateFindTitleParams(params);
-      const foundByTitle = findByTitle(todoStore, searchedTitle);
+      const foundByTitle = findByTitle(todoStore, validateFindTitleParams(params));
       display(["Found Todo(s):", ...formatList(foundByTitle)]);
       break;
     case "find-by-status":
-      //const found = find(todoStore, validatedIdParam(todoStore, +params))
-      //display(["Found Todo:", format(found)]);
+      const foundByStatus = findByStatus(todoStore, validateStatusParam(params))
+      display(["Found Todo:", ...formatList(foundByStatus)]);
       break;
     case "update-title":
       //const found = find(todoStore, validatedIdParam(todoStore, +params))
