@@ -3,7 +3,9 @@ import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
 
 export function format(todo: Todo) {
-  return `${todo.id} - [${todo.done ? "x" : " "}] ${todo.title}`;
+  return `${todo.id} - [${todo.done ? "x" : " "}] (${todo.labels.join(", ")}) ${
+    todo.title
+  }`;
 }
 
 export function formatList(todos: Todo[]) {
@@ -29,7 +31,8 @@ export function add(store: TodoStore, params: string[]): Todo {
   const newTodo = {
     title,
     done: false,
-    id: nextId(todos),
+    id: nextId(todos), labels: []
+    
   };
   store.set([...todos, newTodo]);
   return newTodo;
@@ -86,7 +89,7 @@ export function updateTodo(store: TodoStore, param: [number, string]): Todo {
   return todos[todoIndex];
 }
 
-export function deleteTodo(store: TodoStore, param: number):void {
+export function deleteTodo(store: TodoStore, param: number): void {
   let todos: Todo[] = store.get();
   store.set(todos.filter((todo) => todo.id !== param));
 }

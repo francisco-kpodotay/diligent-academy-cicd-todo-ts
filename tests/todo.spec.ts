@@ -27,8 +27,8 @@ function createMockStore(data: Todo[]) {
 
 describe("format", () => {
   it("should format a not done todo", () => {
-    const todo = { title: "todo title", id: 1, done: false };
-    const expected = "1 - [ ] todo title";
+    const todo = { title: "todo title", id: 1, done: false, labels: [] };
+    const expected = "1 - [ ] () todo title";
 
     const current = format(todo);
 
@@ -36,8 +36,8 @@ describe("format", () => {
   });
 
   it("should format a done todo", () => {
-    const todo = { title: "todo title", id: 1, done: true };
-    const expected = "1 - [x] todo title";
+    const todo = { title: "todo title", id: 1, done: true, labels: [] };
+    const expected = "1 - [x] () todo title";
 
     const current = format(todo);
 
@@ -48,10 +48,10 @@ describe("format", () => {
 describe("formatList", () => {
   it("should format a list of todos", () => {
     const todos = [
-      { title: "todo title", id: 1, done: true },
-      { title: "todo title 2", id: 2, done: false },
+      { title: "todo title", id: 1, done: true, labels: [] },
+      { title: "todo title 2", id: 2, done: false, labels: [] },
     ];
-    const expected = ["1 - [x] todo title", "2 - [ ] todo title 2"];
+    const expected = ["1 - [x] () todo title", "2 - [ ] () todo title 2"];
 
     const current = formatList(todos);
 
@@ -70,12 +70,12 @@ describe("formatList", () => {
 describe("list", () => {
   it("should list the todos", () => {
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false },
-      { id: 2, title: "Todo 2", done: true },
+      { id: 1, title: "Todo 1", done: false, labels: [] },
+      { id: 2, title: "Todo 2", done: true, labels: [] },
     ]);
     const expected = [
-      { id: 1, title: "Todo 1", done: false },
-      { id: 2, title: "Todo 2", done: true },
+      { id: 1, title: "Todo 1", done: false, labels: [] },
+      { id: 2, title: "Todo 2", done: true , labels: []},
     ];
 
     const current = list(mockStore);
@@ -100,7 +100,8 @@ describe("add", () => {
     const expected = {
       id: 1,
       done: false,
-      title: "New Todo",
+      title: "New Todo"
+      , labels: []
     };
 
     const current = add(mockStore, params);
@@ -111,12 +112,12 @@ describe("add", () => {
 
   it("should append a new todo to the existing items", () => {
     const params = ["New Todo"];
-    const stored = [{ id: 1, title: "Todo 1", done: true }];
+    const stored = [{ id: 1, title: "Todo 1", done: true, labels: [] }];
     const mockStore = createMockStore(stored);
     const expected = {
       id: 2,
       done: false,
-      title: "New Todo",
+      title: "New Todo", labels: []
     };
 
     const current = add(mockStore, params);
@@ -128,14 +129,14 @@ describe("add", () => {
   it("should calculate the id by max id + 1, missing ids in a sequence", () => {
     const params = ["New Todo"];
     const stored = [
-      { id: 2, title: "Todo 1", done: true },
-      { id: 4, title: "Todo 1", done: true },
+      { id: 2, title: "Todo 1", done: true, labels: [] },
+      { id: 4, title: "Todo 1", done: true, labels: [] },
     ];
     const mockStore = createMockStore(stored);
     const expected = {
       id: 5,
       done: false,
-      title: "New Todo",
+      title: "New Todo", labels: []
     };
 
     const current = add(mockStore, params);
@@ -153,12 +154,14 @@ describe("complete", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
     ]);
     const expected = {
       id: 1,
       done: true,
       title: "New Todo",
+      labels: [],
     };
 
     const current = complete(mockStore, params);
@@ -176,12 +179,14 @@ describe("findById", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
     ]);
     const expected = {
       id: 1,
       done: false,
       title: "New Todo",
+      labels: [],
     };
 
     const current = findById(mockStore, params);
@@ -207,11 +212,13 @@ describe("findByTitle", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
       {
         id: 2,
         done: false,
         title: "Todo",
+        labels: [],
       },
     ]);
     const expected = [
@@ -219,6 +226,7 @@ describe("findByTitle", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
     ];
 
@@ -234,16 +242,19 @@ describe("findByTitle", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
       {
         id: 2,
         done: false,
         title: "Todo",
+        labels: [],
       },
       {
         id: 3,
         done: false,
         title: "new",
+        labels: [],
       },
     ]);
     const expected = [
@@ -251,11 +262,13 @@ describe("findByTitle", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
       {
         id: 3,
         done: false,
         title: "new",
+        labels: [],
       },
     ];
 
@@ -282,16 +295,19 @@ describe("findByStatus", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
       {
         id: 2,
         done: true,
         title: "Todo",
+        labels: [],
       },
       {
         id: 3,
         done: true,
         title: "new",
+        labels: [],
       },
     ]);
     const expected = [
@@ -299,11 +315,13 @@ describe("findByStatus", () => {
         id: 2,
         done: true,
         title: "Todo",
+        labels: [],
       },
       {
         id: 3,
         done: true,
         title: "new",
+        labels: [],
       },
     ];
 
@@ -318,16 +336,19 @@ describe("findByStatus", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
       {
         id: 2,
         done: true,
         title: "Todo",
+        labels: [],
       },
       {
         id: 3,
         done: true,
         title: "new",
+        labels: [],
       },
     ]);
     const expected = [
@@ -335,6 +356,7 @@ describe("findByStatus", () => {
         id: 1,
         done: false,
         title: "New Todo",
+        labels: [],
       },
     ];
 
@@ -361,12 +383,14 @@ describe("update-title", () => {
         id: 1,
         done: false,
         title: "Old",
+        labels: [],
       },
     ]);
     const expected = {
       id: 1,
       done: false,
       title: "New Todo",
+      labels: [],
     };
     const current = updateTodo(mockStore, params);
 
@@ -382,6 +406,7 @@ describe("delete", () => {
         id: 1,
         done: false,
         title: "Old",
+        labels: [],
       },
     ]);
 
@@ -393,5 +418,4 @@ describe("delete", () => {
     // Assert that the store is now an empty array (after deletion)
     expect(mockStore.get()).toStrictEqual([]);
   });
-
 });

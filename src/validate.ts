@@ -7,7 +7,7 @@ export function validateAddParams(params: string[]) {
     throw new AppError("Give a title!");
   }
   const [title] = params;
-  if (typeof title !== "string" || title?.length === 0) {
+  if (typeof title !== "string" || title?.length <= 0) {
     throw new AppError("The title must be a non zero length string.");
   }
   //TODO return just the title (just a string)

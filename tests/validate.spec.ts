@@ -64,7 +64,7 @@ describe("validatedCompleteParams", () => {
     const param = 1;
     const expected = 1;
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false },
+      { id: 1, title: "Todo 1", done: false , labels: []},
     ]);
 
     const result = validatedIdParam(mockStore, param);
@@ -94,7 +94,7 @@ describe("validatedCompleteParams", () => {
   it("should throw when the param is not valid Id", () => {
     const param = 2;
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false },
+      { id: 1, title: "Todo 1", done: false , labels: []},
     ]);
 
     expect(() => validatedIdParam(mockStore, param)).toThrow(
@@ -172,7 +172,7 @@ describe("validateUpdateParams", () => {
   it("should pass and return with a tuple [number, string]", () => {
     const param: string[] = ["1", "New", "Todo", "title"];
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false },
+      { id: 1, title: "Todo 1", done: false, labels: [] },
     ]);
     const expected: [number, string] = [1, "New Todo title"];
 
@@ -223,7 +223,7 @@ describe("validateUpdateParams", () => {
   it("should throw when the param is not valid Id", () => {
     const param = 2;
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false },
+      { id: 1, title: "Todo 1", done: false, labels: [] },
     ]);
 
     expect(() => validatedIdParam(mockStore, param)).toThrow(
