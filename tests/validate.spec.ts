@@ -7,6 +7,7 @@ import {
   validateUpdateParams,
   validateLabelText,
   validatedAddLabelParam,
+  validatedDeleteLabelParam,
 } from "../src/validate.js";
 import { Todo } from "../src/interfaces.js";
 
@@ -273,3 +274,18 @@ describe("validatedAddLabelParam",()=>{
     expect(result).toStrictEqual(expected);
   });
 })
+
+describe("validatedDeleteLabelParam",()=>{
+  it("should pass and return with a tuple [number, string]", () => {
+    const param: string[] = ["1", "New", "Todo", "label"];
+    const mockStore = createMockStore([
+      { id: 1, title: "Todo 1", done: false, labels: [] },
+    ]);
+    const expected: [number, string] = [1, "New Todo label"];
+
+    const result = validatedDeleteLabelParam(mockStore, param);
+
+    expect(result).toStrictEqual(expected);
+  });
+})
+

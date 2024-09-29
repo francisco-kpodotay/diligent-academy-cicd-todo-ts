@@ -3,11 +3,12 @@ import {
   add,
   addLabel,
   complete,
+  deleteLabel,
   deleteTodo,
   findById,
   findByStatus,
   findByTitle,
-  format,
+  formatToString,
   formatList,
   list,
   updateTodo,
@@ -31,7 +32,7 @@ describe("format", () => {
     const todo = { title: "todo title", id: 1, done: false, labels: [] };
     const expected = "1 - [ ] () todo title";
 
-    const current = format(todo);
+    const current = formatToString(todo);
 
     expect(current).toStrictEqual(expected);
   });
@@ -40,7 +41,7 @@ describe("format", () => {
     const todo = { title: "todo title", id: 1, done: true, labels: [] };
     const expected = "1 - [x] () todo title";
 
-    const current = format(todo);
+    const current = formatToString(todo);
 
     expect(current).toStrictEqual(expected);
   });
@@ -445,5 +446,30 @@ describe("addLabel", () => {
 
     expect(mockStore.get()[0].labels[0]).toStrictEqual(expected[0].labels[0]);
     expect(mockStore.get()).toStrictEqual(expected)
+  });
+});
+
+describe("deleteLabel", () => {
+  it("should delete a label", () => {
+    const params: [number, string] = [1, "cica"];
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+        labels: ["cica"],
+      },
+    ]);
+    const expected = [{
+      id: 1,
+      done: false,
+      title: "New Todo",
+      labels: [],
+    }];
+
+    deleteLabel(mockStore, params)
+
+    expect(mockStore.get()).toStrictEqual(expected)
+    expect(mockStore.get()[0].labels.length).toBe(0);
   });
 });

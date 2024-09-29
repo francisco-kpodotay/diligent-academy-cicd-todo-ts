@@ -1,16 +1,13 @@
-import exp from "constants";
 import { AppError } from "./app-error.js";
 import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
 
-export function format(todo: Todo) {
-  return `${todo.id} - [${todo.done ? "x" : " "}] (${todo.labels.join(", ")}) ${
-    todo.title
-  }`;
+export function formatToString(todo: Todo) {
+  return `${todo.id} - [${todo.done ? "x" : " "}] (${todo.labels.join(", ")}) ${todo.title}`;
 }
 
 export function formatList(todos: Todo[]) {
-  return todos.map(format);
+  return todos.map(formatToString);
 }
 
 function nextId(todos: Todo[]) {
@@ -96,10 +93,20 @@ export function deleteTodo(store: TodoStore, param: number): void {
 }
 
 export function addLabel(store: TodoStore, params: [number, string]): string {
-  let todos: Todo[] = store.get();
+  const todos: Todo[] = store.get();
   const [id, label] = params;
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   todos[todoIndex].labels.push(label);
   store.set(todos);
   return label;
+}
+
+export function deleteLabel(store: TodoStore, params: [number, string]): void {
+  const todos: Todo[] = store.get();
+  const [id, labelParam] = params;
+  const todoIndex = todos.findIndex((todo) => todo.id === id);
+  todos[todoIndex].labels = todos[todoIndex].labels.filter(
+    (label) => label !== labelParam
+  );
+  store.set(todos);
 }

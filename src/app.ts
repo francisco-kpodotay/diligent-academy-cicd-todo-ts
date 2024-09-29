@@ -1,7 +1,7 @@
 import {
   list,
   formatList,
-  format,
+  formatToString,
   add,
   complete,
   findById,
@@ -10,6 +10,7 @@ import {
   updateTodo,
   deleteTodo,
   addLabel,
+  deleteLabel,
 } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
@@ -20,6 +21,7 @@ import {
   validateFindTitleParams,
   validateUpdateParams,
   validatedAddLabelParam,
+  validatedDeleteLabelParam,
 } from "./validate.js";
 import { TodoStore } from "./interfaces.js";
 
@@ -29,25 +31,26 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
   switch (command) {
     case "list":
       const todos = list(todoStore);
-      display([...formatList(todos), `You have ${todos.length} todos.`]);
+      console.table(todoStore.get())
+      console.log(`You have ${todos.length} todos.`)
       break;
     case "add":
       const added = add(todoStore, validateAddParams(params));
-      display(["New Todo added:", format(added)]);
+      display(["New Todo added:", formatToString(added)]);
       break;
     case "complete":
       const completed = complete(
         todoStore,
         validatedIdParam(todoStore, +params)
       );
-      display(["Todo set to completed:", format(completed)]);
+      display(["Todo set to completed:", formatToString(completed)]);
       break;
     case "find-by-id":
       const foundById = findById(
         todoStore,
         validatedIdParam(todoStore, +params)
       );
-      display(["Found Todo:", format(foundById)]);
+      display(["Found Todo:", formatToString(foundById)]);
       break;
     case "find-by-title":
       const foundByTitle = findByTitle(
@@ -68,19 +71,19 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
         todoStore,
         validateUpdateParams(todoStore, params)
       );
-      display(["Todo updated:", format(updatedTodo)]);
+      display(["Todo updated:", formatToString(updatedTodo)]);
       break;
     case "delete":
       deleteTodo(todoStore, validatedIdParam(todoStore, +params))
-      display(["Todo Deleted"]);
+      display(["Todo Deleted."]);
       break;
     case "add-label":
       const addedLabel = addLabel(todoStore, validatedAddLabelParam(todoStore, params))
       display(["Label added:", addedLabel]);
       break;
-    case "delete-labe":
-      //const found = find(todoStore, validatedIdParam(todoStore, +params))
-      //display(["Found Todo:", format(found)]);
+    case "delete-label":
+      deleteLabel(todoStore, validatedDeleteLabelParam(todoStore, params))
+      display(["Label deleted."]);
       break;
     case "find-by-label":
       //const found = find(todoStore, validatedIdParam(todoStore, +params))

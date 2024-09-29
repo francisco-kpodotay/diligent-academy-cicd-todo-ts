@@ -69,7 +69,7 @@ export function validateUpdateParams(
   return [id, rest.join(" ")];
 }
 
-export function validateLabelText(params: string[]){
+export function validateLabelText(params: string[]) {
   if (params.length <= 0) {
     throw new AppError("Give a label name!");
   }
@@ -79,10 +79,24 @@ export function validateLabelText(params: string[]){
   }
 }
 
-export function validatedAddLabelParam(todoStore: TodoStore, params: string[]): [number, string]{
+export function validatedAddLabelParam(
+  todoStore: TodoStore,
+  params: string[]
+): [number, string] {
   const [stringId, ...rest] = params;
   const id = +stringId;
   validatedIdParam(todoStore, id);
   validateLabelText(rest);
-  return [id, rest.join(" ")] 
+  return [id, rest.join(" ")];
+}
+
+export function validatedDeleteLabelParam(
+  todoStore: TodoStore,
+  params: string[]
+): [number, string] {
+  const [stringId, ...rest] = params;
+  const id = +stringId;
+  validatedIdParam(todoStore, id);
+  validateLabelText(rest);
+  return [id, rest.join(" ")];
 }

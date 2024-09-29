@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "done": false,
+    "title": "Wash dishes",
+    "labels": ["housework"]
+  },
+  {
+    "id": 2,
+    "done": true,
+    "title": "Buy groceries",
+    "labels": ["errands"]
+  },
+  {
+    "id": 3,
+    "done": false,
+    "title": "Vacuum living room",
+    "labels": ["housework"]
+  },
+  {
+    "id": 4,
+    "done": false,
+    "title": "Prepare dinner",
+    "labels": ["cooking"]
+  },
+  {
+    "id": 5,
+    "done": true,
+    "title": "Pay bills",
+    "labels": ["finance"]
+  },
+  {
+    "id": 6,
+    "done": false,
+    "title": "Do laundry",
+    "labels": ["housework"]
+  },
+  {
+    "id": 7,
+    "done": false,
+    "title": "Water plants",
+    "labels": ["gardening"]
+  },
+  {
+    "id": 8,
+    "done": true,
+    "title": "Walk the dog",
+    "labels": ["exercise", "pets"]
+  },
+  {
+    "id": 9,
+    "done": false,
+    "title": "Morning workout",
+    "labels": ["exercise"]
+  }
+]
