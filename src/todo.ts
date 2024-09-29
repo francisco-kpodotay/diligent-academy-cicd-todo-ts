@@ -1,4 +1,3 @@
-import { isDataView } from "util/types";
 import { AppError } from "./app-error.js";
 import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
@@ -25,20 +24,18 @@ export function list(store: TodoStore) {
 }
 
 export function add(store: TodoStore, params: string[]): Todo {
-  const title = params.join(" ");
   const todos = store.get();
+  const title = params.join(" ");
   const newTodo = {
     title,
     done: false,
     id: nextId(todos),
   };
-  const toStore = [...todos, newTodo];
-  store.set(toStore);
+  store.set([...todos, newTodo]);
   return newTodo;
 }
 
-export function complete(store: TodoStore, param: number): Todo {
-  const id = param;
+export function complete(store: TodoStore, id: number): Todo {
   const todos: Todo[] = store.get();
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   todos[todoIndex].done = true;
@@ -46,8 +43,7 @@ export function complete(store: TodoStore, param: number): Todo {
   return todos[todoIndex];
 }
 
-export function findById(store: TodoStore, param: number): Todo {
-  const id = param;
+export function findById(store: TodoStore, id: number): Todo {
   const todos: Todo[] = store.get();
   const result = todos.find((todo) => todo.id === id);
   if (!result) {
