@@ -10,6 +10,7 @@ export function validateAddParams(params: string[]) {
   if (typeof title !== "string" || title?.length === 0) {
     throw new AppError("The title must be a non zero length string.");
   }
+  //TODO return just the title (just a string)
   return params;
 }
 
@@ -55,4 +56,15 @@ export function validatedIdParam(todoStore: TodoStore, param: number) {
     throw new AppError("Given number is not a valid Id.");
   }
   return param;
+}
+
+export function validateUpdateParams(
+  todoStore: TodoStore,
+  params: string[]
+): [number, string] {
+  const [stringId, ...rest] = params;
+  const id = +stringId;
+  validatedIdParam(todoStore, id);
+  validateAddParams(rest);
+  return [id, rest.join(" ")];
 }

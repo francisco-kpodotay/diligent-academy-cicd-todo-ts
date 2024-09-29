@@ -4,6 +4,7 @@ import {
   validatedIdParam,
   validateStatusParam,
   validateFindTitleParams,
+  validateUpdateParams,
 } from "../src/validate.js";
 import { Todo } from "../src/interfaces.js";
 
@@ -135,15 +136,15 @@ describe("validateFindTitleParams", () => {
   });
 });
 
-describe("validatedStatusParam", ()=>{
-  it("should pass and return with the original params", ()=>{
+describe("validatedStatusParam", () => {
+  it("should pass and return with the original params", () => {
     const param = ["done"];
     const expected = "done";
 
-    const result = validateStatusParam(param)
+    const result = validateStatusParam(param);
 
     expect(result).toStrictEqual(expected);
-  })
+  });
   it("should throw when no param presented", () => {
     const param: string[] = [];
 
@@ -158,11 +159,75 @@ describe("validatedStatusParam", ()=>{
     );
   });
 
-  it("should throw when not the correct metodes used", ()=>{
+  it("should throw when not the correct metodes used", () => {
     const param = ["do"];
 
     expect(() => validateStatusParam(param)).toThrow(
-     `This is not a valid param: "do". Try to use "done" or "not-done".`
+      `This is not a valid param: "do". Try to use "done" or "not-done".`
     );
-  })
-})
+  });
+});
+
+describe("validateUpdateParams", () => {
+  it("should pass and return with a tuple [number, string]", () => {
+    const param: string[] = ["1", "New", "Todo", "title"];
+    const mockStore = createMockStore([
+      { id: 1, title: "Todo 1", done: false },
+    ]);
+    const expected: [number, string] = [1, "New Todo title"];
+
+    const result = validateUpdateParams(mockStore, param);
+
+    expect(result).toStrictEqual(expected);
+  });it("should throw when no params given.", () => {
+    const params: string[] = [];
+
+    expect(() => validateAddParams(params)).toThrow("Give a title!");
+  });
+
+  it("should throw when the param is not a string", () => {
+    const params = [5];
+
+    // @ts-ignore
+    expect(() => validateAddParams(params)).toThrow(
+      "The title must be a non zero length string."
+    );
+  });
+
+  it("should throw when the param is a zero length string", () => {
+    const params = [""];
+
+    expect(() => validateAddParams(params)).toThrow(
+      "The title must be a non zero length string."
+    );
+  });
+  it("should throw when the param is NaN", () => {
+    const param = "string";
+    const mockStore = createMockStore([]);
+
+    // @ts-ignore
+    expect(() => validatedIdParam(mockStore, param)).toThrow(
+      "Given parameter is not a number."
+    );
+  });
+
+  it("should throw when the param is a zero", () => {
+    const param = 0;
+    const mockStore = createMockStore([]);
+
+    expect(() => validatedIdParam(mockStore, param)).toThrow(
+      "Parameter should be bigger than 0."
+    );
+  });
+
+  it("should throw when the param is not valid Id", () => {
+    const param = 2;
+    const mockStore = createMockStore([
+      { id: 1, title: "Todo 1", done: false },
+    ]);
+
+    expect(() => validatedIdParam(mockStore, param)).toThrow(
+      "Given number is not a valid Id."
+    );
+  });
+});

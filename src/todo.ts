@@ -79,3 +79,12 @@ export function findByStatus(store: TodoStore, param: string) {
     );
   }
 }
+
+export function updateTodo(store: TodoStore, param: [number, string]): Todo{
+  const todos: Todo[] = store.get();
+  const [id, title] = param;
+  const todoIndex = todos.findIndex((todo) => todo.id === id);
+  todos[todoIndex].title = title;  
+  store.set(todos)
+  return todos[todoIndex];
+}
