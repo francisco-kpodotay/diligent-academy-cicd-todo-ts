@@ -9,6 +9,7 @@ import {
   findByStatus,
   updateTodo,
   deleteTodo,
+  addLabel,
 } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
@@ -18,6 +19,7 @@ import {
   validateStatusParam,
   validateFindTitleParams,
   validateUpdateParams,
+  validatedAddLabelParam,
 } from "./validate.js";
 import { TodoStore } from "./interfaces.js";
 
@@ -73,8 +75,8 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
       display(["Todo Deleted"]);
       break;
     case "add-label":
-      //const found = find(todoStore, validatedIdParam(todoStore, +params))
-      //display(["Found Todo:", format(found)]);
+      const addedLabel = addLabel(todoStore, validatedAddLabelParam(todoStore, params))
+      display(["Label added:", addedLabel]);
       break;
     case "delete-labe":
       //const found = find(todoStore, validatedIdParam(todoStore, +params))

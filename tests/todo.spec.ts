@@ -1,6 +1,7 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import {
   add,
+  addLabel,
   complete,
   deleteTodo,
   findById,
@@ -75,7 +76,7 @@ describe("list", () => {
     ]);
     const expected = [
       { id: 1, title: "Todo 1", done: false, labels: [] },
-      { id: 2, title: "Todo 2", done: true , labels: []},
+      { id: 2, title: "Todo 2", done: true, labels: [] },
     ];
 
     const current = list(mockStore);
@@ -100,8 +101,8 @@ describe("add", () => {
     const expected = {
       id: 1,
       done: false,
-      title: "New Todo"
-      , labels: []
+      title: "New Todo",
+      labels: [],
     };
 
     const current = add(mockStore, params);
@@ -117,7 +118,8 @@ describe("add", () => {
     const expected = {
       id: 2,
       done: false,
-      title: "New Todo", labels: []
+      title: "New Todo",
+      labels: [],
     };
 
     const current = add(mockStore, params);
@@ -136,7 +138,8 @@ describe("add", () => {
     const expected = {
       id: 5,
       done: false,
-      title: "New Todo", labels: []
+      title: "New Todo",
+      labels: [],
     };
 
     const current = add(mockStore, params);
@@ -417,5 +420,30 @@ describe("delete", () => {
 
     // Assert that the store is now an empty array (after deletion)
     expect(mockStore.get()).toStrictEqual([]);
+  });
+});
+
+describe("addLabel", () => {
+  it("should add a label to an existing todo", () => {
+    const params: [number, string] = [1, "cica"];
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+        labels: [],
+      },
+    ]);
+    const expected = [{
+      id: 1,
+      done: false,
+      title: "New Todo",
+      labels: ["cica"],
+    }];
+
+    addLabel(mockStore, params);
+
+    expect(mockStore.get()[0].labels[0]).toStrictEqual(expected[0].labels[0]);
+    expect(mockStore.get()).toStrictEqual(expected)
   });
 });

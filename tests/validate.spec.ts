@@ -5,6 +5,8 @@ import {
   validateStatusParam,
   validateFindTitleParams,
   validateUpdateParams,
+  validateLabelText,
+  validatedAddLabelParam,
 } from "../src/validate.js";
 import { Todo } from "../src/interfaces.js";
 
@@ -64,7 +66,7 @@ describe("validatedCompleteParams", () => {
     const param = 1;
     const expected = 1;
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false , labels: []},
+      { id: 1, title: "Todo 1", done: false, labels: [] },
     ]);
 
     const result = validatedIdParam(mockStore, param);
@@ -94,7 +96,7 @@ describe("validatedCompleteParams", () => {
   it("should throw when the param is not valid Id", () => {
     const param = 2;
     const mockStore = createMockStore([
-      { id: 1, title: "Todo 1", done: false , labels: []},
+      { id: 1, title: "Todo 1", done: false, labels: [] },
     ]);
 
     expect(() => validatedIdParam(mockStore, param)).toThrow(
@@ -179,7 +181,8 @@ describe("validateUpdateParams", () => {
     const result = validateUpdateParams(mockStore, param);
 
     expect(result).toStrictEqual(expected);
-  });it("should throw when no params given.", () => {
+  });
+  it("should throw when no params given.", () => {
     const params: string[] = [];
 
     expect(() => validateAddParams(params)).toThrow("Give a title!");
@@ -231,3 +234,42 @@ describe("validateUpdateParams", () => {
     );
   });
 });
+
+describe("validateLabelText",()=>{
+  it("should throw when no params given.", () => {
+    const params: string[] = [];
+
+    expect(() => validateLabelText(params)).toThrow("Give a label name!");
+  });
+
+  it("should throw when the param is not a string", () => {
+    const params = [5];
+
+    // @ts-ignore
+    expect(() => validateLabelText(params)).toThrow(
+      "The label must be a non zero length string."
+    );
+  });
+
+  it("should throw when the param is a zero length string", () => {
+    const params = [""];
+
+    expect(() => validateLabelText(params)).toThrow(
+      "The label must be a non zero length string."
+    );
+  });
+})
+
+describe("validatedAddLabelParam",()=>{
+  it("should pass and return with a tuple [number, string]", () => {
+    const param: string[] = ["1", "New", "Todo", "label"];
+    const mockStore = createMockStore([
+      { id: 1, title: "Todo 1", done: false, labels: [] },
+    ]);
+    const expected: [number, string] = [1, "New Todo label"];
+
+    const result = validatedAddLabelParam(mockStore, param);
+
+    expect(result).toStrictEqual(expected);
+  });
+})

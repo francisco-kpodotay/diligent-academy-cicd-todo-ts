@@ -68,3 +68,21 @@ export function validateUpdateParams(
   validateAddParams(rest);
   return [id, rest.join(" ")];
 }
+
+export function validateLabelText(params: string[]){
+  if (params.length <= 0) {
+    throw new AppError("Give a label name!");
+  }
+  const [title] = params;
+  if (typeof title !== "string" || title?.length <= 1) {
+    throw new AppError("The label must be a non zero length string.");
+  }
+}
+
+export function validatedAddLabelParam(todoStore: TodoStore, params: string[]): [number, string]{
+  const [stringId, ...rest] = params;
+  const id = +stringId;
+  validatedIdParam(todoStore, id);
+  validateLabelText(rest);
+  return [id, rest.join(" ")] 
+}

@@ -1,3 +1,4 @@
+import exp from "constants";
 import { AppError } from "./app-error.js";
 import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
@@ -31,8 +32,8 @@ export function add(store: TodoStore, params: string[]): Todo {
   const newTodo = {
     title,
     done: false,
-    id: nextId(todos), labels: []
-    
+    id: nextId(todos),
+    labels: [],
   };
   store.set([...todos, newTodo]);
   return newTodo;
@@ -90,6 +91,15 @@ export function updateTodo(store: TodoStore, param: [number, string]): Todo {
 }
 
 export function deleteTodo(store: TodoStore, param: number): void {
-  let todos: Todo[] = store.get();
+  const todos: Todo[] = store.get();
   store.set(todos.filter((todo) => todo.id !== param));
+}
+
+export function addLabel(store: TodoStore, params: [number, string]): string {
+  let todos: Todo[] = store.get();
+  const [id, label] = params;
+  const todoIndex = todos.findIndex((todo) => todo.id === id);
+  todos[todoIndex].labels.push(label);
+  store.set(todos);
+  return label;
 }
