@@ -2,6 +2,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import {
   add,
   complete,
+  deleteTodo,
   findById,
   findByStatus,
   findByTitle,
@@ -14,9 +15,13 @@ import { Todo } from "../src/interfaces.js";
 
 //TODO extract the test helper function
 function createMockStore(data: Todo[]) {
+  let todos = [...data]; // Create a copy to avoid mutation of the original array
+
   return {
-    get: jest.fn(() => data),
-    set: jest.fn(),
+    get: jest.fn(() => todos),
+    set: jest.fn((newTodos: Todo[]) => {
+      todos = newTodos; // Update the todos array when set is called
+    }),
   };
 }
 
@@ -348,26 +353,45 @@ describe("findByStatus", () => {
   });
 });
 
-describe("update-title",()=>{
-  it("should find a existing todo and uptate the title",()=>{
+describe("update-title", () => {
+  it("should find a existing todo and uptate the title", () => {
     const params: [number, string] = [1, "New Todo"];
     const mockStore = createMockStore([
       {
         id: 1,
         done: false,
         title: "Old",
-      }
+      },
     ]);
-    const expected = 
-      {
-        id: 1,
-        done: false,
-        title: "New Todo",
-      }
-    ;
-
+    const expected = {
+      id: 1,
+      done: false,
+      title: "New Todo",
+    };
     const current = updateTodo(mockStore, params);
 
     expect(current).toStrictEqual(expected);
-  })
-})
+  });
+});
+
+describe("delete", () => {
+  it("should delete an existing todo", () => {
+    const param = 1;
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "Old",
+      },
+    ]);
+
+    deleteTodo(mockStore, param);
+
+    // Assert that the todo was deleted (length is 0)
+    expect(mockStore.get().length).toBe(0);
+
+    // Assert that the store is now an empty array (after deletion)
+    expect(mockStore.get()).toStrictEqual([]);
+  });
+
+});

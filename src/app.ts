@@ -8,6 +8,7 @@ import {
   findByTitle,
   findByStatus,
   updateTodo,
+  deleteTodo,
 } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
@@ -68,8 +69,8 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
       display(["Todo updated:", format(updatedTodo)]);
       break;
     case "delete":
-      //const found = find(todoStore, validatedIdParam(todoStore, +params))
-      //display(["Found Todo:", format(found)]);
+      deleteTodo(todoStore, validatedIdParam(todoStore, +params))
+      display(["Todo Deleted"]);
       break;
     case "add-label":
       //const found = find(todoStore, validatedIdParam(todoStore, +params))

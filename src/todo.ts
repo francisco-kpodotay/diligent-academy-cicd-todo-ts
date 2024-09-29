@@ -1,3 +1,4 @@
+import { isDataView } from "util/types";
 import { AppError } from "./app-error.js";
 import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
@@ -80,11 +81,16 @@ export function findByStatus(store: TodoStore, param: string) {
   }
 }
 
-export function updateTodo(store: TodoStore, param: [number, string]): Todo{
+export function updateTodo(store: TodoStore, param: [number, string]): Todo {
   const todos: Todo[] = store.get();
   const [id, title] = param;
   const todoIndex = todos.findIndex((todo) => todo.id === id);
-  todos[todoIndex].title = title;  
-  store.set(todos)
+  todos[todoIndex].title = title;
+  store.set(todos);
   return todos[todoIndex];
+}
+
+export function deleteTodo(store: TodoStore, param: number):void {
+  let todos: Todo[] = store.get();
+  store.set(todos.filter((todo) => todo.id !== param));
 }
