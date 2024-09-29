@@ -77,6 +77,7 @@ export function validateLabelText(params: string[]) {
   if (typeof title !== "string" || title?.length <= 1) {
     throw new AppError("The label must be a non zero length string.");
   }
+  return title;
 }
 
 export function validatedAddLabelParam(

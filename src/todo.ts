@@ -110,3 +110,8 @@ export function deleteLabel(store: TodoStore, params: [number, string]): void {
   );
   store.set(todos);
 }
+
+export function findByLabel(store: TodoStore, params: string){
+  const todos: Todo[] = store.get();
+  return todos.filter((todo)=>todo.labels.includes(params))
+}

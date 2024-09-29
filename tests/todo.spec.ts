@@ -12,6 +12,7 @@ import {
   formatList,
   list,
   updateTodo,
+  findByLabel,
 } from "../src/todo.js";
 import { Todo } from "../src/interfaces.js";
 
@@ -471,5 +472,35 @@ describe("deleteLabel", () => {
 
     expect(mockStore.get()).toStrictEqual(expected)
     expect(mockStore.get()[0].labels.length).toBe(0);
+  });
+});
+
+describe("findByLabel", () => {
+  it("should find a Todo with label", () => {
+    const params = "cica";
+    const mockStore = createMockStore([
+      {
+        id: 1,
+        done: false,
+        title: "New Todo",
+        labels: ["cica"],
+      },
+      {
+        id: 2,
+        done: false,
+        title: "New Todo 2.0",
+        labels: [],
+      },
+    ]);
+    const expected = [{
+      id: 1,
+      done: false,
+      title: "New Todo",
+      labels: ["cica"],
+    }];
+
+    const current = findByLabel(mockStore, params)
+
+    expect(current).toStrictEqual(expected)
   });
 });

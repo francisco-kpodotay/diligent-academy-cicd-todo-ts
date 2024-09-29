@@ -11,6 +11,7 @@ import {
   deleteTodo,
   addLabel,
   deleteLabel,
+  findByLabel,
 } from "./todo.js";
 import { display } from "./display.js";
 import { AppError } from "./app-error.js";
@@ -22,6 +23,7 @@ import {
   validateUpdateParams,
   validatedAddLabelParam,
   validatedDeleteLabelParam,
+  validateLabelText,
 } from "./validate.js";
 import { TodoStore } from "./interfaces.js";
 
@@ -31,8 +33,8 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
   switch (command) {
     case "list":
       const todos = list(todoStore);
-      console.table(todoStore.get())
-      console.log(`You have ${todos.length} todos.`)
+      console.table(todoStore.get());
+      console.log(`You have ${todos.length} todos.`);
       break;
     case "add":
       const added = add(todoStore, validateAddParams(params));
@@ -74,20 +76,26 @@ export function createApp(todoStore: TodoStore, args: string[]): void {
       display(["Todo updated:", formatToString(updatedTodo)]);
       break;
     case "delete":
-      deleteTodo(todoStore, validatedIdParam(todoStore, +params))
+      deleteTodo(todoStore, validatedIdParam(todoStore, +params));
       display(["Todo Deleted."]);
       break;
     case "add-label":
-      const addedLabel = addLabel(todoStore, validatedAddLabelParam(todoStore, params))
+      const addedLabel = addLabel(
+        todoStore,
+        validatedAddLabelParam(todoStore, params)
+      );
       display(["Label added:", addedLabel]);
       break;
     case "delete-label":
-      deleteLabel(todoStore, validatedDeleteLabelParam(todoStore, params))
+      deleteLabel(todoStore, validatedDeleteLabelParam(todoStore, params));
       display(["Label deleted."]);
       break;
     case "find-by-label":
-      //const found = find(todoStore, validatedIdParam(todoStore, +params))
-      //display(["Found Todo:", format(found)]);
+      const foundByLabel = findByLabel(
+        todoStore,
+        validateLabelText(params)
+      );
+      display(["Found Todo(s):", ...formatList(foundByLabel)]);
       break;
     default:
       throw new AppError(`Unknown command: ${command}`);
