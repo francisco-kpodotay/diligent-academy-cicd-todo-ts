@@ -22,7 +22,7 @@ function createMockStore(data: Todo[]) {
 describe("validateAddParams", () => {
   it("should pass and return with the original params with single string", () => {
     const params = ["Todo"];
-    const expected = ["Todo"];
+    const expected = "Todo";
 
     const current = validateAddParams(params);
 
@@ -31,7 +31,7 @@ describe("validateAddParams", () => {
 
   it("should pass and return with the original params with single string separated with spaces", () => {
     const params = ["Todo Item"];
-    const expected = ["Todo Item"];
+    const expected = "Todo Item";
 
     const current = validateAddParams(params);
 

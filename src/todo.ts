@@ -1,13 +1,24 @@
 import { AppError } from "./app-error.js";
 import { Status } from "./enums.js";
 import { Todo, TodoStore } from "./interfaces.js";
+import {
+  validateAddParams,
+  validatedIdParam,
+  validateStatusParam,
+  validateFindTitleParams,
+  validateUpdateParams,
+  validatedAddLabelParam,
+  validatedDeleteLabelParam,
+  validateLabelText,
+} from "./validate.js";
 
-export function formatToString(todo: Todo) {
-  return `${todo.id} - [${todo.done ? "x" : " "}] (${todo.labels.join(", ")}) ${todo.title}`;
-}
-
-export function formatList(todos: Todo[]) {
-  return todos.map(formatToString);
+export function format(...todos: Todo[]): string | string[] {
+  return todos.map(
+    (todo) =>
+      `${todo.id} - [${todo.done ? "x" : " "}] (${todo.labels.join(", ")}) ${
+        todo.title
+      }`
+  );
 }
 
 function nextId(todos: Todo[]) {
@@ -23,95 +34,101 @@ export function list(store: TodoStore) {
   return store.get();
 }
 
-export function add(store: TodoStore, params: string[]): Todo {
+export function add(store: TodoStore, params: string[]): Todo[] {
+  const validated: string = validateAddParams(params);
   const todos = store.get();
-  const title = params.join(" ");
   const newTodo = {
-    title,
-    done: false,
     id: nextId(todos),
+    title: validated,
+    done: false,
     labels: [],
   };
   store.set([...todos, newTodo]);
-  return newTodo;
+  return [newTodo];
 }
 
-export function complete(store: TodoStore, id: number): Todo {
+export function complete(store: TodoStore, params: string[]): Todo {
+  const validated: number = validatedIdParam(store, +params);
   const todos: Todo[] = store.get();
-  const todoIndex = todos.findIndex((todo) => todo.id === id);
+  const todoIndex = todos.findIndex((todo) => todo.id === validated);
   todos[todoIndex].done = true;
   store.set(todos);
   return todos[todoIndex];
 }
 
-export function findById(store: TodoStore, id: number): Todo {
+export function findById(store: TodoStore, params: string[]):Todo {
+  const validated: number = validatedIdParam(store, +params);
   const todos: Todo[] = store.get();
-  const result = todos.find((todo) => todo.id === id);
-  if (!result) {
-    throw new AppError(`Todo with id ${id} not found`);
-  }
+  const result = todos.find((todo) => todo.id === validated)!;
   return result;
 }
 
-export function findByTitle(store: TodoStore, param: string): Todo[] {
+export function findByTitle(store: TodoStore, params: string[]): Todo[] {
+  const validated: string = validateFindTitleParams(params);
   const todos: Todo[] = store.get();
   const result = todos.filter((todo) =>
-    todo.title.toLowerCase().includes(param.toLowerCase())
+    todo.title.toLowerCase().includes(validated.toLowerCase())
   );
-  if (result.length <= 0) {
-    throw new AppError(`Don't found Todod with title: "${param}"`);
+  if (result.length === 0) {
+    throw new AppError(`Don't found Todod with title: "${validated}"`);
   }
   return result;
 }
 
-export function findByStatus(store: TodoStore, param: string) {
+export function findByStatus(store: TodoStore, params: string[]): Todo[] {
+  const validated: string = validateStatusParam(params);
   const todos: Todo[] = store.get();
-  if (param === Status.Done) {
-    return todos.filter((todo) => todo.done === true);
+  if (validated === Status.Done) {
+    return todos.filter((todo) => todo.done === true)!;
   }
-  if (param === Status.NotDone) {
-    return todos.filter((todo) => todo.done === false);
-  } else {
-    throw new AppError(
-      `This is not a valid param: "${param}". Try to use "done" or "not-done".`
-    );
+  else {
+    return todos.filter((todo) => todo.done === false)!;
   }
 }
 
-export function updateTodo(store: TodoStore, param: [number, string]): Todo {
+export function updateTodo(store: TodoStore, params: string[]): Todo {
+  const validated: [number, string] = validateUpdateParams(store, params);
   const todos: Todo[] = store.get();
-  const [id, title] = param;
+  const [id, title] = validated;
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   todos[todoIndex].title = title;
   store.set(todos);
   return todos[todoIndex];
 }
 
-export function deleteTodo(store: TodoStore, param: number): void {
+export function deleteTodo(store: TodoStore, params: string[]):Todo {
+  const validated: number = validatedIdParam(store, +params);
   const todos: Todo[] = store.get();
-  store.set(todos.filter((todo) => todo.id !== param));
+  const deleted = todos.find((todo) => todo.id === validated)!;
+  store.set(todos.filter((todo) => todo.id !== validated));
+  return deleted;
 }
 
-export function addLabel(store: TodoStore, params: [number, string]): string {
+export function addLabel(store: TodoStore, params: string[]): string {
+  const validated: [number, string] = validatedAddLabelParam(store, params);
   const todos: Todo[] = store.get();
-  const [id, label] = params;
+  const [id, label] = validated;
   const todoIndex = todos.findIndex((todo) => todo.id === id);
   todos[todoIndex].labels.push(label);
   store.set(todos);
   return label;
 }
 
-export function deleteLabel(store: TodoStore, params: [number, string]): void {
+export function deleteLabel(store: TodoStore, params: string[]): Todo {
+  const validated: [number, string] = validatedDeleteLabelParam(store, params);
   const todos: Todo[] = store.get();
-  const [id, labelParam] = params;
+  const [id, labelParam] = validated;
   const todoIndex = todos.findIndex((todo) => todo.id === id);
+  const deleted = todos[todoIndex];
   todos[todoIndex].labels = todos[todoIndex].labels.filter(
     (label) => label !== labelParam
   );
   store.set(todos);
+  return deleted;
 }
 
-export function findByLabel(store: TodoStore, params: string){
+export function findByLabel(store: TodoStore, params: string[]): Todo[] {
+  const validated: string = validateLabelText(params);
   const todos: Todo[] = store.get();
-  return todos.filter((todo)=>todo.labels.includes(params))
+  return todos.filter((todo) => todo.labels.includes(validated));
 }

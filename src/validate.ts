@@ -10,8 +10,7 @@ export function validateAddParams(params: string[]) {
   if (typeof title !== "string" || title?.length <= 0) {
     throw new AppError("The title must be a non zero length string.");
   }
-  //TODO return just the title (just a string)
-  return params;
+  return params.join(" ");
 }
 
 export function validateFindTitleParams(params: string[]) {
